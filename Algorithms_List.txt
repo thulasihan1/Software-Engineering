@@ -1,0 +1,5 @@
+1. 2 Pointers
+2. Sliding Window
+3. Binary Search
+4. Floyd's Tortis and Hare
+5. Insertion Sort

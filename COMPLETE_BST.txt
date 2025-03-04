@@ -1,0 +1,595 @@
+
+
+#include <stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+
+typedef struct Node
+{
+    int value;
+    struct Node *left;
+    struct Node *right;
+}node;
+
+/*MAX Function for height, since height = max(left subtree, right subtree) +1 */
+int MAX(int left, int right)
+{
+    if(left>right)
+    {
+        return left;
+    }
+    else 
+    {
+        return right;
+    }
+}
+
+int HEIGHT(node *start)
+{
+    if(start==NULL)
+    {
+        return -1;
+    }
+    int max;
+    max = MAX(HEIGHT(start->left), HEIGHT(start->right));
+    int height;
+    height= max + 1;
+    return(height);
+    
+    
+}
+
+/*OFF-SPIN of the SEARCH FUNCTION but this time I am storing values in an array as im traversing through the BST to my specific number */
+void TRACKER (int num, int track[], int *count, node *start)
+{
+    if(start==NULL)
+    {
+        return;
+    }
+    if(num > start->value)
+    {
+        track[*count] = start->value;
+        *count = *count + 1;
+        TRACKER(num, track, count, start->right);
+    }
+    
+    if(num < start->value)
+    {
+        track[*count] = start->value;
+        *count = *count + 1;
+        TRACKER(num, track, count, start->left);
+    }
+    
+    if(num == start->value)
+    {
+      return;
+    }
+}
+void LCA(int num1, int num2, node *start)
+{
+    int size;
+    size = HEIGHT(start);
+    int track1[size];
+    int track2[size];
+    int counter1 =0;
+    int counter2 =0;
+    TRACKER(num1, track1, &counter1, start);
+    TRACKER(num2, track2, &counter2, start);
+    int i;
+    int lca;
+  
+    if(counter1<=counter2)
+    {
+        for(i=(counter1-1);i>=0;i--)
+        {
+            if(track1[i]==track2[i])
+            {
+                lca = track1[i];
+                break;
+            }
+        }
+    }
+    
+   else if(counter1>counter2)
+    {
+        for(i=(counter2 -1);i>=0;i--)
+        {
+            if(track1[i]==track2[i])
+            {
+                lca = track1[i];
+                break;
+            }
+        }
+    }
+    
+    printf("\n The LCA between %d and %d is %d\n", num1, num2, lca);
+    
+}
+
+/*Balance = Height(right subtree) - Height(left subtree) */
+void BALANCE(node *start)
+{
+    int balance;
+    int right;
+    int left;
+    right = HEIGHT(start->right);
+    left = HEIGHT(start->left);
+    balance = left - right;
+    
+    if(balance ==0)
+    {
+        printf("\nPERFECT BALANCE\n");
+    }
+    else if(balance == 1 || balance == -1)
+    {
+        printf("\nBalanced: %d", balance);
+    }
+    else 
+    {
+        printf("\nNOT BALANCE\n");
+    }
+}
+
+void MAXIMUM(node*start)
+{
+    while (start->right!=NULL)
+    {
+        start = start->right;
+    }
+    printf("\nMaximum number is: %d", start->value);
+    
+}
+
+void MINIMUM(node*start)
+{
+    while (start->left!=NULL)
+    {
+        start = start->left;
+    }
+    printf("\nMinimuim number is: %d", start->value);
+  
+}
+
+
+
+void SEARCH (node *start, int number)
+{
+    if(start==NULL)
+    {
+        printf("\nCannot find the number %d\n", number);
+        
+      
+        
+    }
+    else if(number == start->value)
+    {
+        printf("\nThe Number is found: %d\n", number);
+        
+    }
+    else if(number <start->value)
+    {
+         SEARCH(start->left, number);
+    }
+    else if(number > start->value)
+    {
+          SEARCH(start->right, number);
+    }
+    
+}
+void INORDER(node *start)
+{
+   if(start==NULL)
+   {
+       return;
+   }
+   INORDER(start->left);
+   printf(" %d ",start->value);
+   INORDER(start->right);
+    
+}
+
+
+void PREORDER(node *start)
+{
+   if(start==NULL)
+   {
+       return;
+   }
+    printf(" %d ",start->value);
+    PREORDER(start->left);
+    PREORDER(start->right);
+    
+}
+
+/* Storing nodes in an array using In order traversing */
+void INORDER_array(node *start, int array[], int *i)
+{
+    if(start == NULL)
+    {
+        return;
+    }
+   INORDER_array(start->left, array, i);
+    array[*i] = start->value;
+    *i = *i +1;
+    INORDER_array(start->right, array, i);
+    
+    
+}
+
+/* Counting How many Nodes are in the tree */
+void INORDER_size(node *start, int *size)
+{
+    if(start == NULL)
+    {
+        return ;
+    }
+    INORDER_size(start->left, size);
+    *size = *size +1;
+    INORDER_size(start->right, size);
+    
+}
+
+void CHECK_BST(node *start)
+{
+    int size;
+    size = 0;
+    int i=0;
+    int j;
+    bool checker = true;
+    INORDER_size(start, &size);
+    int array[size];
+    INORDER_array(start, array, &i);
+    
+    for(j=0;j<size -1;j++)
+    {
+        if(array[j]>array[j+1])
+        {
+            printf("\n This tree is NOT a BST\n");
+            checker = false;
+            break;
+        }
+    }
+    if(checker==true)
+    {
+        printf("\n This tree is a BST\n");
+    }
+ 
+}
+
+    
+   
+
+
+void POSTORDER(node *start)
+{
+   if(start==NULL)
+   {
+       return;
+   }
+   POSTORDER(start->left);
+   POSTORDER(start->right);
+   printf(" %d ",start->value);
+    
+}
+
+/*MAXX Function for Predcessor function */
+node *MAXX(node *start)
+{
+    while(start->right!=NULL)
+    {
+        start = start->right;
+    }
+    return(start);
+}
+
+/*Min Function for Case 3 of Deletion and for Sucessor Function */
+node *MIN(node *start)
+{
+    while(start->left!=NULL)
+    {
+        start = start->left;
+    }
+    return(start);
+}
+
+
+void DEPTH_NODE(node *start, int number, int *counter)
+{
+    if(start==NULL)
+    {
+        printf("\n The number does not exist\n");
+        return;
+    }
+    if(number > start->value)
+    {
+        
+        *counter = *counter +1;
+        DEPTH_NODE(start->right, number, counter);
+    }
+    if(number <start->value)
+    {
+         *counter = *counter +1;
+        DEPTH_NODE(start->left, number, counter);
+    }
+    if(number == start->value)
+    {
+        printf("\n The depth of %d is %d\n", number, *counter);
+        *counter =0;
+        return;
+    }
+}
+
+void PREDCESSOR(node *start, int number)
+{
+    if(start==NULL)
+    {
+        printf("\n Cannot find the number\n");
+        return;
+    }
+    if(number <start->value)
+    {
+        PREDCESSOR(start->left, number);
+    }
+    if(number> start->value)
+    {
+        PREDCESSOR(start->right, number);
+    }
+    if(number==start->value)
+    {
+        if(start->left==NULL)
+        {
+            printf("\nThere is no Predcessor for %d\n", number);
+            return;
+        }
+        else 
+        {
+            start = MAXX(start->left);
+            printf("\n The Predcessor for %d is %d\n", number, start->value);
+            return;
+        }
+    }
+}
+
+void SUCESSOR(node *start, int number)
+{
+    if(start==NULL)
+    {
+        printf("\nCannot find the number\n");
+        return;
+    }
+    if(number > start->value)
+    {
+        SUCESSOR(start->right, number);
+    }
+    if(number <start->value)
+    {
+        SUCESSOR(start->left, number);
+    }
+    if(number == start->value)
+    {
+        if(start->right == NULL)
+        {
+            printf("\nThere is no SUCESSOR for %d\n", number);
+        }
+        else 
+        {
+            start = MIN(start->right);
+            printf("\n THe SUCESSOR of %d is %d\n", number, start->value);
+            return;
+        }
+    }
+}
+
+void INORDER_SUCESSOR(node *start, int number)
+{
+    int sucessor =0;
+    
+    while(start!=NULL)
+    {
+        if(number <start->value)
+        {
+            sucessor = start->value;
+            start = start->left;
+        }
+        else
+        {
+            start = start->right;
+        }
+    }
+    if(sucessor==0)
+    {
+        printf("\n The number %d has no INORDER SUCESSOR\n", number);
+    }
+    
+    else
+    {
+        printf("\nThe INORDER SUCESSOR of %d is %d\n", number, sucessor);
+    }
+}
+
+void INORDER_PREDCESSOR(node *start, int number)
+{
+    int predcessor =0;
+    
+    while(start!=NULL)
+    {
+        if(number >start->value)
+        {
+           predcessor = start->value;
+            start = start->right;
+        }
+        else
+        {
+            start = start->left;
+        }
+    }
+    if(predcessor==0)
+    {
+        printf("\n The number %d has no INORDER PREDCESSOR\n", number);
+    }
+    
+    else
+    {
+        printf("\nThe INORDER PREDCESSOR of %d is %d\n", number, predcessor);
+    }
+}
+
+node *DELETE_NODE(node *start, int number)
+{
+    if(start==NULL)
+    {
+        printf("\n The BST is Empty\n");
+       
+    }
+  else if(number<start->value)
+    {
+        start->left = DELETE_NODE(start->left, number);
+    }
+   else if(number>start->value)
+    {
+        start->right = DELETE_NODE(start->right, number);
+    }
+    
+   else if(number== start->value)
+    {
+        /*Case 1: Node with no childs*/
+        if(start->right == NULL && start->left == NULL)
+        {
+            free(start);
+            start = NULL;
+            return(start);
+           
+        }
+        
+        /*Case 2: Node with 1 child*/
+        if(start->left == NULL && start->right!=NULL)
+        {
+            node *book;
+            book = start;
+            start = start->right;
+            free(book);
+            return(start);
+        }
+        
+        if(start->right == NULL && start->left!=NULL)
+        {
+            node *book;
+            book = start;
+            start = start->left;
+            free(book);
+            return(start);
+        }
+        
+        /*CASE 3: Node with 2 childs*/
+        if(start->left!= NULL && start->right!=NULL)
+        {
+            node * book;
+            book = MIN(start->right);
+            start->value = book->value;
+            start->right = DELETE_NODE(start->right, book->value);
+            return(start);
+        }
+    }
+    return(start);
+}
+   
+node *INSERT_NODE(node *start, int number)
+{
+    if(start==NULL)
+    {
+        node *Node;
+        Node = (node*)malloc(sizeof(node));
+        Node->value = number;
+        Node->right = NULL;
+        Node->left = NULL;
+        start = Node;
+        
+    }
+    
+    else if(number<=start->value)
+    {
+        start ->left = INSERT_NODE(start->left, number);
+    }
+    
+    else if(number>start->value)
+    {
+        start ->right = INSERT_NODE(start->right, number);
+    }
+    return(start);
+    
+    
+}
+int main(void)
+{
+    node *start;
+    start = NULL;
+    
+    /* Inserting Nodes */
+    start = INSERT_NODE(start,15);
+    start = INSERT_NODE(start,4);
+    start = INSERT_NODE(start,21);
+    start = INSERT_NODE(start,3);
+    start = INSERT_NODE(start,5);
+    start = INSERT_NODE(start,16);
+    start = INSERT_NODE(start,33);
+    start = INSERT_NODE(start,9);
+    
+    /*In order */
+    printf("\nIn-order:\n");
+    INORDER(start);
+    
+    /*Pre order */
+    printf("\nPre-order:\n");
+    PREORDER(start);
+    
+    /*Post order */
+    printf("\nPost-order:\n");
+    POSTORDER(start);
+    
+    /* Search */
+    SEARCH(start, 11);
+    SEARCH(start, 9);
+    
+    /*Min & MAX */
+    MINIMUM(start);
+    MAXIMUM(start);
+    
+    /*HEIGHT */
+    int height;
+    height = HEIGHT(start); 
+    printf("\nHeight is:%d\n", height);
+    
+    /* DEPTH OF A NODE */
+    int counter =0;
+    DEPTH_NODE(start, 9, &counter);
+    
+    /*BALANCE */
+    BALANCE(start);
+    
+    /*Check if a tree is a BST or not by In-order traversing and storing the values in an array*/
+    CHECK_BST(start); 
+    
+    /* Sucessor and Predcessor of a NUMBER */
+    SUCESSOR(start, 15);
+    PREDCESSOR(start, 15);
+    
+    /*Lowest Common Ancestor (LCA) */
+    LCA(3, 9, start);
+    
+    /*INORDER SUCESSOR */
+    INORDER_SUCESSOR(start, 5);
+    
+    /*INORDER PREDCESSOR */
+    INORDER_PREDCESSOR(start, 15);
+    
+    
+    /*DELETE NODE */
+    start = DELETE_NODE(start, 9);
+    
+    /*In order */
+    printf("\nIn-order after deleting:\n");
+    INORDER(start);
+    return 0;
+}

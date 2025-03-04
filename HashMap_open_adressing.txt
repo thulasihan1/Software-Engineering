@@ -1,0 +1,125 @@
+/* HASH MAP */
+/*Collision Resolution:Open Addressing + Linear Probing */
+
+#include <stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+
+typedef struct Node
+{
+    char name[200];
+    
+}node; 
+
+
+int hash_function(char *str, int table_size)
+{
+    int length;
+    length = strlen(str);
+    int key = 0;
+    int i;
+    for(i=0;i<length;i++)
+    {
+        key = key + (int)str[i];
+    }
+    int h;
+    int m = table_size;
+    h = key - (m*(int)(key/m));
+    return(h);
+    
+    
+}
+
+node *INSERT(node *start, int index, char *str, int table_size)
+{
+    
+    
+   
+    
+    if(start[index].name==NULL)
+    {
+        strcpy(start[index].name, str);
+    }
+    else
+    {
+       bool full = false; 
+       int check = index;
+       while(start[index].name[0]!='\0')
+       {
+           
+           if(index == table_size-1)
+           {
+               index = 0;
+               full = true;
+           }
+           if(full == true && check== index)
+           {
+               printf("\n Table is Full\n");
+               break;
+           }
+           
+           index++;
+       }
+       
+       strcpy(start[index].name, str);
+       
+    }
+    
+    
+}
+
+void PRINT(node *start, int table_size)
+{
+   
+    int i;
+   for(i=0;i<table_size;i++)
+   {
+       printf("Index: %d --> %s", i, start[i].name);
+       printf("\n");
+   }
+}
+
+
+
+
+int main(void)
+{
+    int table_size;
+    printf("\n What is the size of the table\n");
+    scanf("%d", &table_size);
+    node *start;
+    start = (node*)malloc(table_size*sizeof(node));
+    int i; 
+    for(i=0;i<table_size;i++)
+    {
+        start[i].name[0] = '\0';
+        
+    } 
+    
+    int list;
+    char str[200];
+    int index;
+    printf("\n How many names?\n");
+    scanf("%d", &list);
+    int j;
+    for(j=0;j<list;j++)
+    {
+        printf("\n Create a name\n");
+        scanf("%s", str);
+        index = hash_function(str, table_size);
+        printf("%d", index);
+        INSERT(start, index, str, table_size); 
+        
+    }
+    printf("\n");
+    PRINT(start, table_size);
+    
+   
+   
+    
+    
+
+    return 0;
+}

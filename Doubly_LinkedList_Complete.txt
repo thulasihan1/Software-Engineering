@@ -1,0 +1,170 @@
+
+
+#include <stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct Node 
+{
+    int value;
+    struct Node*next;
+    struct Node*prev;
+    
+}node;
+
+
+node *REVERSE(node *start)
+{
+    node *track;
+    node *future;
+    node *past;
+    track = start;
+    past =NULL;
+    while (track!=NULL)
+    {
+       
+            future = track->next;
+            track->next = track->prev;
+            track->prev = track->next;
+            past = track;
+            track = future;
+    }
+    start = past;
+    return(start);
+}
+
+node *DELETENODE(node *start, int delete)
+{
+    if (start==NULL)
+    {
+        printf("\n Nothing to delete\n");
+    }
+    else
+    {
+        if(delete==1)
+        {
+            node *book;
+            book = start;
+            (start->next)->prev = NULL;
+            start = start->next;
+            free(book);
+        }
+        else 
+        {
+            node*track;
+            track =start;
+            int i;
+            for(i=1;i<(delete-1);i++)
+            {
+                track = track->next;
+            }
+            if((track->next)->next!=NULL)
+            {
+                node *book;
+                book = track->next;
+                ((track->next)->next)->prev = track;
+                track ->next = (track->next)->next;
+                free(book);
+            }
+            else
+            {
+                node *book;
+                book = track->next;
+                track->next =NULL;
+                free(book);
+            }
+        }
+    }
+    return(start);
+}
+void PRINTNODE(node*start)
+{
+    node *track;
+    track = start;
+    while (track!=NULL)
+    {
+        printf(" %d", track->value);
+        track = track->next;
+    }
+}
+
+node *INSERTNODE(node *start, int number, int pos)
+{
+    node *Node;
+    Node = (node*)malloc(sizeof(node));
+   Node->value = number;
+   
+   if(start==NULL)
+   {
+       Node->next = NULL;
+       Node ->prev =NULL;
+       start = Node;
+   }
+   else 
+   {
+       if(pos==1)
+       {
+           Node->next = start;
+           Node->prev =NULL;
+           start = Node;
+       }
+       else
+       {
+           node *track;
+           track =start;
+           int i;
+           for(i=1;i<(pos-1);i++)
+           {
+               track = track->next;
+           }
+           if(track->next!=NULL)
+           {
+               Node->next = track->next;
+               (track->next)->prev = Node;
+               Node->prev = track;
+               track->next =Node;
+           }
+           else
+           {
+               Node->next = track->next;
+               Node->prev = track;
+               track->next =Node;
+           }
+       }
+   }
+    return(start);
+}
+
+int main(void)
+{
+    int i;
+    node*start;
+    start =NULL;
+    int size;
+    int number;
+    int pos;
+    
+    printf("\n How many nodes do you want\n");
+    scanf("%d", &size);
+    for(i=0;i<size;i++)
+    {
+        printf("\n What is the value\n");
+        scanf("%d", &number);
+        printf("\n What is the position\n");
+        scanf("%d", &pos);
+        start = INSERTNODE(start, number, pos);
+        PRINTNODE(start);
+    }
+    
+    printf("\n What node to delete\n");
+    int delete;
+    scanf("%d", &delete);
+    start = DELETENODE(start, delete);
+    PRINTNODE(start);
+    
+    start = REVERSE(start);
+    printf("\n");
+    PRINTNODE(start);
+    return 0;
+}

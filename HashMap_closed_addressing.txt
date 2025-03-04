@@ -1,0 +1,149 @@
+/* HASH MAP */
+/*Collision Resolution: Closed Addressing */
+
+#include <stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+
+typedef struct Node
+{
+    char name[200];
+    struct Node *next;
+    
+}node; 
+
+
+int hash_function(char *str, int table_size)
+{
+    int length;
+    length = strlen(str);
+    int key = 0;
+    int i;
+    for(i=0;i<length;i++)
+    {
+        key = key + (int)str[i];
+    }
+    int h;
+    int m = table_size;
+    h = key - (m*(int)(key/m));
+    return(h);
+    
+    
+}
+
+node *INSERT(node *start, char *str)
+{
+    node *Node;
+    Node = (node*)malloc(sizeof(node));
+    strcpy(Node->name, str);
+    Node->next = NULL;
+    
+    if(start==NULL)
+    {
+        start = Node;
+    }
+    else
+    {
+        node *track;
+        track = start;
+        while(track->next!=NULL)
+        {
+            track = track->next;
+        }
+        track->next = Node;
+    }
+    
+    return(start);
+}
+
+void PRINT(node *start, int index)
+{
+    node *track;
+    track = start;
+    printf("Index: %d", index);
+    while(track!=NULL)
+    {
+        printf(" %s", track->name);
+        track= track->next;
+    }
+}
+
+
+void Search(char *str, node *start[], int table_size)
+{
+    int index;
+    index = hash_function(str, table_size);
+    bool find;
+    find = false;
+    node *track;
+    track = start[index];
+    
+    while(track!=NULL)
+    {
+        if(strcmp(track->name, str) == 0)  // Compare the content of the strings
+        {
+           find = true;
+           break;
+        }
+        track = track->next;
+    }
+    
+    if(find==true)
+    {
+        printf("\n Found name\n");
+    }
+    else
+    {
+         printf("\n Does not exist\n");
+    }
+}
+
+int main(void)
+{
+    int table_size;
+    printf("\n What is the size of the table\n");
+    scanf("%d", &table_size);
+    node **start;
+    start = (node**)malloc(table_size*sizeof(node*));
+    int i; 
+    for(i=0;i<table_size;i++)
+    {
+        start[i] = NULL;
+        
+    } 
+    
+    int list;
+    char str[200];
+    int index;
+    printf("\n How many names?\n");
+    scanf("%d", &list);
+    int j;
+    for(j=0;j<list;j++)
+    {
+        printf("\n Create a name\n");
+        scanf("%s", str);
+        index = hash_function(str, table_size);
+        start[index] = INSERT(start[index], str); 
+        
+        
+        
+    }
+    
+    int k;
+    for(k=0;k<table_size;k++)
+    {
+         PRINT(start[k], k);
+         printf("\n");
+    }
+    
+    Search("Thulasihan", start, table_size);
+    Search("Jim", start, table_size);
+    
+   
+    
+    
+
+    return 0;
+}

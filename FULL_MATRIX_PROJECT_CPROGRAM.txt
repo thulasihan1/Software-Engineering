@@ -1,0 +1,212 @@
+/*A data file contains real numbers that are to be read into a 2-D array. The first two
+numbers in the file are not part of the data but are actually the number of rows and the
+number of columns in that order. The last two numbers are also not part of the data and are
+used to specify which row and which column will be used in calling the rows and column
+functions (see below). A typical file will look like this:
+3 6
+2.3 6.77 6.5 3.4 2.19 2.123
+4.4 6.77 8.9 3.9 3.24 4.567
+3.6 4.55 1.5 3.4 8.44 9.542
+2
+4
+The file will never be larger than 200 rows and 200 columns and never be smaller than 2
+rows and 2 columns. */
+
+
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+
+void BORDERS(double array[200][200], int rows, int columns){
+    int i; 
+    int j;
+    double sum;
+    sum =0;
+    for(i=0;i<rows;i++)
+    {
+        if(i==0 || i== rows-1)
+        {
+        for (j=0;j<columns;j++)
+        {
+            sum= sum+ array[i][j];
+            }
+                        }
+    }
+    
+    for(i=1;i<rows-1;i++)
+    {
+       
+        
+        for (j=0;j<columns;j++)
+        {
+            if(j==0 || j== columns-1){
+                sum= sum+ array[i][j];
+            }
+            }
+                        
+    }
+     printf("\nThe Sum of Border is: %.3lf\n", sum); 
+}
+
+void DIAGONAL(double array[200][200], int rows, int columns){
+    int i; 
+    int j;
+    double sum;
+    sum =0;
+    for(i=0;i<rows;i++)
+    {
+        for (j=0;j<columns;j++)
+        {
+            if(i==j)
+            {
+                sum= sum+ array[i][j];
+            }
+        }
+    }
+     printf("\nThe Sum of the Main Diagonal is: %.3lf\n", sum);
+}
+
+void AVERAGEOFCOL(double array[200][200], int rows, int columns, int col_inspect){
+    int i;
+    int j;
+    double avg;
+    double sum;
+    sum =0;
+    for (i=0;i<rows;i++)
+    {
+        
+        for(j=0;j<columns;j++)
+        {
+            if(j==col_inspect-1) 
+            {
+             sum = sum + array[i][j]; 
+
+            }
+            
+        }
+    }
+    avg = (double) sum/rows;
+    printf("\nThe Average of Column %d is: %.3lf\n", col_inspect, avg); 
+}
+
+void SUMOFROW(double array[200][200], int rows, int columns, int row_inspect){
+    int i;
+    int j;
+    double sum;
+    sum =0;
+    for (i=0;i<rows;i++)
+    {
+        if(i==row_inspect-1)
+        {
+            for(j=0;j<columns;j++)
+            {
+              sum = sum + array[i][j];  
+            }
+        }
+    }
+    printf("\nThe Sum of Row %d is: %.3lf\n", row_inspect, sum);
+}
+
+void CORNERS(double array[200][200], int rows, int columns){
+    double sum;
+    int i;
+    int j;
+    sum =0; 
+    for (i=0;i<rows;i++)
+    {
+        for(j=0;j<columns;j++)
+        {
+            if ((i ==0 && j==0)||(i==0 && j==columns-1)||(i ==rows-1 && j==0)||(i ==rows-1 && j==columns-1))
+            {
+                sum = sum + array[i][j];
+            }
+        }
+    }
+    
+    printf("\nSum of the 4 corners is: %.3lf\n", sum);
+}
+
+void AVERAGE(double array[200][200], int rows, int columns){
+    int size;
+    int i;
+    int j;
+    double avg;
+    double sum;
+    size = rows*columns;
+    sum =0;
+    
+    for(i=0;i<rows;i++)
+    {
+        for(j=0;j<columns;j++)
+        {
+            sum = sum + array[i][j];
+        }
+    }
+    
+    avg= (double) sum/size;
+    
+    printf("\nAverage: %.3lf\n", avg);
+}
+
+void PRINTARRAY(double array[200][200], int rows, int columns)
+{
+    int i;
+    int j;
+    for (i=0;i<rows;i++)
+    {
+        for (j=0;j<columns;j++)
+        {
+            printf(" %.3lf ", array[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void GETVALUES(double array[200][200], int *rows, int *columns, int *row_inspect, int *col_inspect){
+    int i;
+    int j;
+    FILE *in;
+    in = fopen("test.txt", "r");
+    
+    fscanf(in, "%d", rows);
+    fscanf(in, "%d", columns);
+    
+    for (i=0;i<(*rows);i++)
+    {
+        for (j=0;j<(*columns);j++)
+        {
+            fscanf(in, "%lf", &array[i][j]);
+        }
+    }
+    
+    fscanf(in, "%d", row_inspect);
+    fscanf(in, "%d", col_inspect);
+    
+    
+}
+int main(void)
+{
+   int rows;
+   int columns;
+   double array[200][200];
+   int row_inspect;
+   int col_inspect;
+   
+   GETVALUES(array, &rows, &columns, &row_inspect, &col_inspect);
+   PRINTARRAY(array, rows, columns);
+   AVERAGE(array, rows, columns);
+   CORNERS(array, rows, columns);
+   SUMOFROW(array, rows, columns, row_inspect);
+   AVERAGEOFCOL(array, rows, columns, col_inspect);
+   DIAGONAL(array, rows, columns);
+   BORDERS(array, rows, columns);
+   
+   
+   
+   
+   
+   
+
+    return 0;
+}

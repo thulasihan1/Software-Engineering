@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <math.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
+
+
+
+void print(int *stack, int size)
+{
+    int i;
+    for(i=0;i<size;i++)
+    {
+        printf(" %d", stack[i]);
+    }
+    printf("\n");
+}
+
+void push (int value, int *stack, int *top, int size)
+{
+    if(*top==size-1)
+    {
+        printf("\nStack is full\n");
+    }
+    else
+    {
+        *top = *top +1;
+        stack[*top] = value;
+    }
+    
+}
+
+
+void pop(int *stack, int *top)
+{
+    if(*top==-1)
+    {
+        printf("\nStack is Empty\n");
+    }
+    else 
+    {
+        stack[*top] = 0;
+        *top = *top -1;
+    }
+}
+
+int main(void)
+{
+    /*Set the size = 3*/
+    int size;
+    printf("\n Size of the stack:\n");
+    scanf("%d", &size);
+    int *stack;
+    stack = (int*)malloc(size*sizeof(int));
+    int i;
+    for(i=0;i<size;i++)
+    {
+        stack[i] = 0;
+    }
+    
+    int top;
+    top =-1;
+    
+    push(5, stack, &top, size);
+    print(stack, size);
+    
+    push(6, stack, &top, size);
+    print(stack, size);
+    
+    push(7, stack, &top, size);
+    print(stack, size);
+    
+    /* The stack is FULL*/
+    push(8, stack, &top, size);
+    print(stack, size);
+    
+    pop(stack, &top);
+    print(stack, size);
+    
+    pop(stack, &top);
+    print(stack, size);
+    
+    pop(stack, &top);
+    print(stack, size);
+    
+    /*The Stack is empty */
+    pop(stack, &top);
+    print(stack, size);
+    
+    
+    
+    
+
+    return 0;
+}

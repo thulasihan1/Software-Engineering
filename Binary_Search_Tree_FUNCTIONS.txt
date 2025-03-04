@@ -1,0 +1,19 @@
+1. Inserting a NODE to a BST
+2. Search if a node exists or not in a BST
+3. Finding Min and Max value of a BST
+4. Finding Height of a BST
+5. Checking if a BST is Balanced or not
+6. Breadth First Search: Level Order
+7. Depth First Search: Pre Order, In Order, Post Order
+8. Check if a binary tree is a BST or not
+9. Delete Nodes from a BST
+10 In order Sucessor of a BST or In order Predecessor of a BST
+11. Depth of a Node
+12. Couting how many nodes are in a tree
+13. Mirror or invert of a BST
+14. Up side Down of a BST
+15. Find the lowest common Ancestor
+16. Subtree Query
+17. Range Search
+18. SUCESSOR OF A NUMBER
+19. PREDCESSOR OF A NUMBER

@@ -1,0 +1,189 @@
+#include <stdio.h>
+#include<math.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
+
+typedef struct Node{
+    int value;
+    struct Node *next;
+}node;
+
+
+node *REVERSE_LINK_LIST(node *start)
+{
+    if(start==NULL)
+    {
+        printf("\n Nothing to reverse\n");
+    }
+    
+    node *track;
+    node *prev;
+    node *future;
+    track = start;
+    prev = NULL;
+    
+    while(track!=NULL)
+    {
+        future = track->next;
+        track->next = prev;
+        prev = track;
+        track = future;
+        
+    }
+    start = prev;
+    return(start);
+}
+
+node *DELETE_NODE(node *start, int delete)
+{
+    if(start==NULL)
+    {
+        printf("\n Nothing to delete\n");
+        return(start);
+    }
+    else 
+    {
+        if(delete ==1)
+        {
+           node *book;
+           book = start;
+           start = book->next;
+           free(book);
+        }
+        else 
+        {
+            int i;
+            node *book;
+            node *track;
+            track = start;
+            for(i=1;i<delete-1;i++)
+            {
+                track = track->next;
+            }
+            book = track->next;
+            track->next = book->next;
+            free(book);
+        }
+        
+        
+    }
+    
+    return(start);
+}
+
+void PRINT_REVERSE(node *track)
+{
+    if(track==NULL)
+    {
+        return;
+    }
+    
+    
+    PRINT_REVERSE(track->next);
+    printf(" %d", track->value);
+}
+void PRINT(node *start)
+{
+    node *track;
+    track = start;
+    if(start==NULL)
+    {
+        printf("\n Nothing to Print\n");
+    }
+    
+    while(track!=NULL)
+    {
+        printf(" %d", track->value);
+        track= track->next;
+    }
+}
+
+node *INSERT_NODE(node *start, int number, int position)
+{
+    node *Node;
+    Node = (node*)malloc(sizeof(node));
+    Node ->value = number;
+    
+    if(start== NULL)
+    {
+        Node->next = NULL;
+        start = Node;
+        
+    }
+    else if(start!=NULL)
+    {
+        if(position==1)
+        {
+            Node->next = start;
+            start = Node;
+        }
+        else
+        {
+            node *track;
+            track = start;
+            int i;
+            for(i=1;i<position-1;i++)
+            {
+                track = track->next;
+            }
+            Node->next = track->next;
+            track->next = Node;
+        }
+    }
+    
+    return(start);
+}
+
+
+int main(void)
+{
+    node *start;
+    start = NULL;
+    int size;
+    int number;
+    int position;
+    int i;
+    
+    printf("\n How many Nodes?\n");
+    scanf("%d", &size);
+    
+    for(i=0; i<size;i++)
+    {
+        printf("\n What is the value?\n");
+        scanf("%d", &number);
+        printf("\n What is the Position?\n");
+        scanf("%d", &position);
+        start = INSERT_NODE(start, number, position);
+        PRINT(start);
+        
+    }
+    
+    node *track;
+    track = start;
+    printf("\n Reverse Order:\n");
+    printf("\n");
+    PRINT_REVERSE(track); 
+    
+    
+    int delete;
+    printf("\n What node to delete\n");
+    scanf("%d", &delete);
+    start = DELETE_NODE(start, delete);
+    PRINT(start);
+    
+    
+    printf("\n Reverse Linked List:\n");
+    printf("\n");
+    start = REVERSE_LINK_LIST(start);
+    PRINT(start);
+    
+    
+    
+    
+    
+    
+
+    return 0;
+}
